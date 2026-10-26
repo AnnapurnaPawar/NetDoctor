@@ -3,6 +3,8 @@ NetDoctor: Real-Time Network Monitoring, Fault Diagnosis and Recovery Verificati
 Streamlit Web Dashboard
 """
 
+import sys
+import os
 import time
 from datetime import datetime
 import streamlit as st
