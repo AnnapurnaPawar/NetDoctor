@@ -76,19 +76,24 @@ def diagnose_network_snapshot(snapshot: Dict[str, Any]) -> List[Dict[str, Any]]:
 
     # RULE 3: Default Gateway Reachability
     if gateway_test.get("status") == "FAIL":
-        findings.append({
-            "test_name": f"Default Gateway Reachability ({gateway_ip})",
-            "actual_result": f"Failed to ping default gateway {gateway_ip} ({gateway_test.get('error', '100% packet loss')}).",
-            "likely_cause": "Loss of communication between your PC and the local router or access point.",
-            "alternative_causes": [
-                "Incorrect default gateway address configured manually.",
-                "The router is restarting, powered down, or rejecting ICMP echo requests.",
-                "Virtual adapter or VPN driver intercepting local broadcast/gateway traffic."
-            ],
-            "confidence": "HIGH" if gateway_ip != "Not Detected" else "MEDIUM",
-            "recommended_action": "Verify you are connected to the correct Wi-Fi network and check if the router lights indicate normal operation.",
-            "rerun_hint": "Test ping to your gateway using the Diagnostics tab."
-        })
+        if len(tcp_passes) >= 2:
+            # TCP traffic is flowing through the gateway to external internet targets;
+            # ICMP ping is simply blocked or filtered by firewall/container policy.
+            pass
+        else:
+            findings.append({
+                "test_name": f"Default Gateway Reachability ({gateway_ip})",
+                "actual_result": f"Failed to ping default gateway {gateway_ip} ({gateway_test.get('error', '100% packet loss')}).",
+                "likely_cause": "Loss of communication between your PC and the local router or access point.",
+                "alternative_causes": [
+                    "Incorrect default gateway address configured manually.",
+                    "The router is restarting, powered down, or rejecting ICMP echo requests.",
+                    "Virtual adapter or VPN driver intercepting local broadcast/gateway traffic."
+                ],
+                "confidence": "HIGH" if gateway_ip != "Not Detected" else "MEDIUM",
+                "recommended_action": "Verify you are connected to the correct Wi-Fi network and check if the router lights indicate normal operation.",
+                "rerun_hint": "Test ping to your gateway using the Diagnostics tab."
+            })
 
     # RULE 4: ICMP Blocked vs Internet Working (Crucial Real-World Diagnostic!)
     # Ping fails, but TCP port probes succeed!
