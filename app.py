@@ -295,14 +295,30 @@ is_cloud = (
     or primary_info.get("interface", "") == "eth0"
 )
 
+# Extract client IP if available via Streamlit context
+client_ip = getattr(st.context, "ip_address", None)
+if not client_ip and hasattr(st.context, "headers"):
+    try:
+        raw_forwarded = st.context.headers.get("x-forwarded-for") or st.context.headers.get("remote-addr")
+        if raw_forwarded:
+            client_ip = raw_forwarded.split(",")[0].strip()
+    except Exception:
+        pass
+
 # ==========================================
 # 1. OVERVIEW SECTION
 # ==========================================
 if nav_section == "Overview":
     st.title("🌐 Network Operations Center (NOC) Overview")
+    loc_ip = primary_info.get("local_ip", "Unknown")
+    nic_name = primary_info.get("interface", "NIC")[:20]
+
     if is_cloud:
-        st.markdown("☁️ **Running in Streamlit Cloud (AWS Container Mode)** • Probing Linux cloud container telemetry. Layer 4 TCP transport and Layer 7 DNS services active.")
-        st.caption("💡 *Note for Evaluators:* This cloud instance monitors the public Streamlit host. To probe your physical PC's local Wi-Fi/Ethernet adapter, launch NetDoctor on your local computer.")
+        st.markdown("☁️ **Running in Streamlit Cloud (Centralized AWS Server Mode)** • Real-time telemetry from the cloud host.")
+        if client_ip:
+            st.info(f"📱 **Client-Server Network Model:** You are connected from client IP **`{client_ip}`** (your internet gateway). Every device viewing this link connects to the same central cloud server (**`{loc_ip}`**). Web browsers prohibit remote websites from scanning your phone or laptop's private Wi-Fi card (`192.168.x.x`). To monitor your personal PC's physical Wi-Fi, run NetDoctor locally on your laptop!")
+        else:
+            st.info(f"💡 **Client-Server Architecture:** NetDoctor is hosted on a central cloud server. Every phone or laptop viewing this link connects to the same cloud server (**`{loc_ip}`**). To monitor your personal PC's private Wi-Fi card, run NetDoctor locally on your computer.")
     else:
         st.markdown("💻 **Running on Local Workstation (Windows PC Mode)** • Probing physical Wi-Fi/Ethernet network adapter, Layer 3 home gateway, Layer 4 transport, and Layer 7 DNS services.")
 
@@ -326,12 +342,11 @@ if nav_section == "Overview":
         """, unsafe_allow_html=True)
 
     with col_stat2:
-        loc_ip = primary_info.get("local_ip", "Unknown")
-        nic_name = primary_info.get("interface", "NIC")[:20]
-        sub_label = f"Cloud Container ({nic_name})" if is_cloud else f"Adapter: {nic_name}"
+        header_title = "Cloud Host IPv4" if is_cloud else "Local IPv4 Address"
+        sub_label = f"Your Client IP: {client_ip}" if (is_cloud and client_ip) else (f"Cloud Host NIC ({nic_name})" if is_cloud else f"Adapter: {nic_name}")
         st.markdown(f"""
         <div class="metric-hero">
-            <div class="header-pill">Local IPv4 Address</div>
+            <div class="header-pill">{header_title}</div>
             <div class="metric-value" style="font-family:'JetBrains Mono', monospace; font-size:1.35rem; color:#38bdf8;">{loc_ip}</div>
             <div style="font-size: 0.8rem; opacity: 0.7;">{sub_label}</div>
         </div>
