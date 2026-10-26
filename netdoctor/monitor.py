@@ -9,6 +9,7 @@ Performs genuine Windows network tests:
 """
 
 import re
+import sys
 import socket
 import subprocess
 import time
@@ -188,7 +189,11 @@ def ping_host(host: str, count: int = DEFAULT_PING_COUNT, timeout_ms: int = DEFA
             "error": "Invalid or unsafe hostname/IP address"
         }
 
-    cmd = ["ping", "-n", str(count), "-w", str(timeout_ms), clean_host]
+    if sys.platform == "win32":
+        cmd = ["ping", "-n", str(count), "-w", str(timeout_ms), clean_host]
+    else:
+        timeout_sec = max(1, int(timeout_ms / 1000.0))
+        cmd = ["ping", "-c", str(count), "-W", str(timeout_sec), clean_host]
     timeout_total = max(4.0, (timeout_ms / 1000.0) * count + 2.0)
 
     try:
