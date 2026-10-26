@@ -1,0 +1,9 @@
+Pinging 10.10.30.3 with 32 bytes of data:
+
+Request timed out.
+Request timed out.
+Request timed out.
+Request timed out.
+
+Ping statistics for 10.10.30.3:
+    Packets: Sent = 4, Received = 0, Lost = 4 (100% loss)

@@ -1,0 +1,11 @@
+Pinging 10.10.30.3 with 32 bytes of data:
+
+Reply from 10.10.30.3: bytes=32 time=2ms TTL=126
+Reply from 10.10.30.3: bytes=32 time=1ms TTL=126
+Reply from 10.10.30.3: bytes=32 time=2ms TTL=126
+Reply from 10.10.30.3: bytes=32 time=1ms TTL=126
+
+Ping statistics for 10.10.30.3:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 1ms, Maximum = 2ms, Average = 1ms
