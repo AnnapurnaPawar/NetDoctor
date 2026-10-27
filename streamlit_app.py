@@ -41,121 +41,110 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Custom Enterprise NOC UI Styling
+# Custom Technical NOC Dashboard UI Styling
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
     html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* Top Level Status Badges with Pulsing Animation */
-    @keyframes pulse-green {
-        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-        70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-    }
-    @keyframes pulse-red {
-        0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-        70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-    }
-    @keyframes pulse-yellow {
-        0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
-        70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
-    }
-
+    /* Restrained, Non-Pulsing Status Badges */
     .badge-pass {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.1) 100%);
-        color: #10b981;
-        border: 1px solid rgba(16, 185, 129, 0.35);
-        padding: 8px 18px;
-        border-radius: 24px;
-        font-weight: 700;
-        font-size: 0.95em;
+        background: #064e3b;
+        color: #6ee7b7;
+        border: 1px solid #059669;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.82rem;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        animation: pulse-green 2.5s infinite;
+        gap: 6px;
+        letter-spacing: 0.02em;
     }
     .badge-warn {
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.1) 100%);
-        color: #f59e0b;
-        border: 1px solid rgba(245, 158, 11, 0.35);
-        padding: 8px 18px;
-        border-radius: 24px;
-        font-weight: 700;
-        font-size: 0.95em;
+        background: #451a03;
+        color: #fcd34d;
+        border: 1px solid #d97706;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.82rem;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        animation: pulse-yellow 2.5s infinite;
+        gap: 6px;
+        letter-spacing: 0.02em;
     }
     .badge-fail {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.1) 100%);
-        color: #ef4444;
-        border: 1px solid rgba(239, 68, 68, 0.35);
-        padding: 8px 18px;
-        border-radius: 24px;
-        font-weight: 700;
-        font-size: 0.95em;
+        background: #450a0a;
+        color: #fca5a5;
+        border: 1px solid #dc2626;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.82rem;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        animation: pulse-red 2.5s infinite;
+        gap: 6px;
+        letter-spacing: 0.02em;
     }
 
-    /* Modern Glassmorphic Metric Tile */
+    /* Clean Technical Metric Card */
     .metric-hero {
-        background: linear-gradient(145deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        padding: 18px 20px;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
+        background: #111827;
+        border: 1px solid #1f2937;
+        border-radius: 6px;
+        padding: 14px 16px;
+        transition: border-color 0.15s ease;
     }
     .metric-hero:hover {
-        border-color: rgba(59, 130, 246, 0.4);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-        transform: translateY(-2px);
+        border-color: #374151;
     }
-    .metric-hero::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #3b82f6, #06b6d4);
-        border-radius: 12px 12px 0 0;
+    .header-pill {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #94a3b8;
+        margin-bottom: 4px;
+    }
+    .metric-hero .metric-value {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #f8fafc;
+        margin: 4px 0 2px 0;
+    }
+    .metric-hero .metric-sub {
+        font-size: 0.75rem;
+        color: #64748b;
     }
 
     /* Terminal Console Faux Window */
     .cisco-terminal-box {
         background: #090d16;
         border: 1px solid #1e293b;
-        border-radius: 10px;
+        border-radius: 6px;
         overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        margin: 12px 0;
+        margin: 10px 0;
     }
     .cisco-terminal-bar {
         background: #0f172a;
-        padding: 8px 14px;
+        padding: 6px 12px;
         border-bottom: 1px solid #1e293b;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.8em;
+        font-size: 0.78rem;
         color: #94a3b8;
     }
     .term-dot {
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
         display: inline-block;
     }
@@ -167,29 +156,24 @@ st.markdown("""
     .cisco-code {
         background: #090d16;
         color: #38bdf8;
-        padding: 12px 16px;
-        border-radius: 8px;
-        border-left: 3px solid #0284c7;
+        padding: 10px 14px;
+        border-radius: 4px;
+        border-left: 2px solid #0284c7;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.9em;
-        line-height: 1.5;
-        margin-top: 8px;
+        font-size: 0.85rem;
+        line-height: 1.45;
+        margin-top: 6px;
         white-space: pre-wrap;
     }
 
-    /* Header Accent */
-    .header-pill {
-        display: inline-block;
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        padding: 4px 10px;
+    /* Clean Table and Container Borders */
+    [data-testid="stDataFrame"] {
+        border: 1px solid #1f2937;
         border-radius: 6px;
-        background: rgba(59, 130, 246, 0.15);
-        color: #60a5fa;
-        border: 1px solid rgba(59, 130, 246, 0.25);
-        margin-bottom: 6px;
+    }
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        border-color: #1f2937 !important;
+        border-radius: 6px !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -233,11 +217,11 @@ def trigger_diagnostic_run():
 # Sidebar Navigation & Controls
 with st.sidebar:
     st.markdown("""
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-        <div style="background: linear-gradient(135deg, #2563eb, #06b6d4); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; box-shadow: 0 4px 14px rgba(37,99,235,0.4);">🩺</div>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <div style="background: #1e293b; width: 36px; height: 36px; border-radius: 6px; border: 1px solid #334155; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">🩺</div>
         <div>
-            <h2 style="margin: 0; font-size: 1.35rem; font-weight: 800; letter-spacing: -0.5px;">NetDoctor</h2>
-            <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Enterprise NOC & Lab</span>
+            <div style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.3px;">NetDoctor</div>
+            <div style="font-size: 0.68rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Network Diagnostic System</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -324,12 +308,12 @@ if nav_section == "Overview":
     if is_cloud:
         active_client = client_ip if (client_ip and not client_ip.startswith("::ffff:127.")) else "Dynamic Web Client"
         st.markdown(f"""
-        <div style="background: linear-gradient(90deg, rgba(59, 130, 246, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%); border-left: 4px solid #38bdf8; border-radius: 8px; padding: 12px 18px; margin-bottom: 20px;">
-            <div style="font-size: 0.95rem; font-weight: 500; color: #f1f5f9;">
-                🌐 <b>Real-Time Dynamic Client Telemetry:</b> Connected from client endpoint <code style="color:#38bdf8; background:#0f172a; padding:2px 8px; border-radius:4px;">{active_client}</code> &bull; Host Gateway: <code style="color:#818cf8; background:#0f172a; padding:2px 8px; border-radius:4px;">{loc_ip}</code>
+        <div style="background: #111827; border: 1px solid #1f2937; border-left: 3px solid #0284c7; border-radius: 6px; padding: 10px 14px; margin-bottom: 16px;">
+            <div style="font-size: 0.88rem; font-weight: 500; color: #e2e8f0;">
+                Connected Endpoint: <code style="color:#38bdf8; background:#0f172a; padding:1px 6px; border-radius:3px;">{active_client}</code> &bull; Host Gateway: <code style="color:#94a3b8; background:#0f172a; padding:1px 6px; border-radius:3px;">{loc_ip}</code>
             </div>
-            <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 4px;">
-                NetDoctor detects each visitor's incoming device endpoint dynamically and cross-probes Layer 3, Layer 4 TCP transport, and Layer 7 DNS services.
+            <div style="font-size: 0.75rem; color: #64748b; margin-top: 3px;">
+                Active multi-layer telemetry across Layer 3 Gateway, Layer 4 TCP transport, and Layer 7 DNS services.
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -350,8 +334,8 @@ if nav_section == "Overview":
         st.markdown(f"""
         <div class="metric-hero">
             <div class="header-pill">System Status</div>
-            <div style="margin: 12px 0 6px 0;">{status_html}</div>
-            <div style="font-size: 0.8rem; opacity: 0.7;">Multi-layer network telemetry</div>
+            <div style="margin: 6px 0 6px 0;">{status_html}</div>
+            <div class="metric-sub">Multi-layer network telemetry</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -368,8 +352,8 @@ if nav_section == "Overview":
         st.markdown(f"""
         <div class="metric-hero">
             <div class="header-pill">{header_title}</div>
-            <div class="metric-value" style="font-family:'JetBrains Mono', monospace; font-size:1.35rem; color:#38bdf8;">{main_ip}</div>
-            <div style="font-size: 0.8rem; opacity: 0.7;">{sub_label}</div>
+            <div class="metric-value">{main_ip}</div>
+            <div class="metric-sub">{sub_label}</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -379,8 +363,8 @@ if nav_section == "Overview":
         st.markdown(f"""
         <div class="metric-hero">
             <div class="header-pill">Default Gateway</div>
-            <div class="metric-value" style="font-family:'JetBrains Mono', monospace; font-size:1.35rem; color:#818cf8;">{gw_ip}</div>
-            <div style="font-size: 0.8rem; opacity: 0.7;">{gw_sub}</div>
+            <div class="metric-value">{gw_ip}</div>
+            <div class="metric-sub">{gw_sub}</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -391,8 +375,8 @@ if nav_section == "Overview":
         st.markdown(f"""
         <div class="metric-hero">
             <div class="header-pill">Last Telemetry Check</div>
-            <div class="metric-value" style="font-family:'JetBrains Mono', monospace; font-size:1.35rem; color:#34d399;">{ts_time}</div>
-            <div style="font-size: 0.8rem; opacity: 0.7;">Date: {ts_date}</div>
+            <div class="metric-value">{ts_time}</div>
+            <div class="metric-sub">Date: {ts_date}</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -634,11 +618,11 @@ elif nav_section == "Fault Diagnosis":
         rerun_hint = f.get("rerun_hint")
 
         if confidence == "HIGH":
-            conf_badge = "<span style='background:rgba(16,185,129,0.18); color:#10b981; padding:3px 10px; border-radius:12px; font-weight:700; font-size:0.8em; border:1px solid rgba(16,185,129,0.35);'>CONFIDENCE: HIGH</span>"
+            conf_badge = "<span style='background:#064e3b; color:#6ee7b7; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem; border:1px solid #059669;'>CONFIDENCE: HIGH</span>"
         elif confidence == "MEDIUM":
-            conf_badge = "<span style='background:rgba(245,158,11,0.18); color:#f59e0b; padding:3px 10px; border-radius:12px; font-weight:700; font-size:0.8em; border:1px solid rgba(245,158,11,0.35);'>CONFIDENCE: MEDIUM</span>"
+            conf_badge = "<span style='background:#451a03; color:#fcd34d; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem; border:1px solid #d97706;'>CONFIDENCE: MEDIUM</span>"
         else:
-            conf_badge = "<span style='background:rgba(148,163,184,0.18); color:#94a3b8; padding:3px 10px; border-radius:12px; font-weight:700; font-size:0.8em; border:1px solid rgba(148,163,184,0.35);'>CONFIDENCE: LOW</span>"
+            conf_badge = "<span style='background:#1e293b; color:#94a3b8; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem; border:1px solid #334155;'>CONFIDENCE: LOW</span>"
 
         with st.container(border=True):
             if "Comprehensive" in test_name:
