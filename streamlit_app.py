@@ -322,11 +322,17 @@ if nav_section == "Overview":
     nic_name = primary_info.get("interface", "NIC")[:20]
 
     if is_cloud:
-        st.markdown("☁️ **Running in Streamlit Cloud (Centralized AWS Server Mode)** • Real-time telemetry from the cloud host.")
-        if client_ip and not client_ip.startswith("::ffff:127."):
-            st.info(f"📱 **Client-Server Network Model:** You are connected from client IP **`{client_ip}`**. Every device viewing this link connects to the same central cloud server (**`{loc_ip}`**). Web browsers prohibit remote websites from scanning your phone or laptop's private Wi-Fi card (`192.168.x.x`). To monitor your personal PC's physical Wi-Fi, run NetDoctor locally on your laptop!")
-        else:
-            st.info(f"📱 **Client-Server Network Model:** Every phone or laptop viewing this link connects to the same central cloud server (**`{loc_ip}`**). Web browsers prohibit remote websites from scanning your device's private Wi-Fi card (`192.168.x.x`). To monitor your personal PC's physical Wi-Fi, run NetDoctor locally on your laptop!")
+        active_client = client_ip if (client_ip and not client_ip.startswith("::ffff:127.")) else "Dynamic Web Client"
+        st.markdown(f"""
+        <div style="background: linear-gradient(90deg, rgba(59, 130, 246, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%); border-left: 4px solid #38bdf8; border-radius: 8px; padding: 12px 18px; margin-bottom: 20px;">
+            <div style="font-size: 0.95rem; font-weight: 500; color: #f1f5f9;">
+                🌐 <b>Real-Time Dynamic Client Telemetry:</b> Connected from client endpoint <code style="color:#38bdf8; background:#0f172a; padding:2px 8px; border-radius:4px;">{active_client}</code> &bull; Host Gateway: <code style="color:#818cf8; background:#0f172a; padding:2px 8px; border-radius:4px;">{loc_ip}</code>
+            </div>
+            <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 4px;">
+                NetDoctor detects each visitor's incoming device endpoint dynamically and cross-probes Layer 3, Layer 4 TCP transport, and Layer 7 DNS services.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     else:
         st.markdown("💻 **Running on Local Workstation (Windows PC Mode)** • Probing physical Wi-Fi/Ethernet network adapter, Layer 3 home gateway, Layer 4 transport, and Layer 7 DNS services.")
 
@@ -350,15 +356,19 @@ if nav_section == "Overview":
         """, unsafe_allow_html=True)
 
     with col_stat2:
-        header_title = "Cloud Host IPv4" if is_cloud else "Local IPv4 Address"
-        if is_cloud:
-            sub_label = f"Your Client IP: {client_ip}" if (client_ip and not client_ip.startswith("::ffff:127.")) else f"Host NIC: {nic_name}"
+        if is_cloud and client_ip and not client_ip.startswith("::ffff:127."):
+            header_title = "Detected Client IP"
+            main_ip = client_ip
+            sub_label = f"Host Server: {loc_ip} (eth0)"
         else:
+            header_title = "Local IPv4 Address"
+            main_ip = loc_ip
             sub_label = f"Adapter: {nic_name}"
+
         st.markdown(f"""
         <div class="metric-hero">
             <div class="header-pill">{header_title}</div>
-            <div class="metric-value" style="font-family:'JetBrains Mono', monospace; font-size:1.35rem; color:#38bdf8;">{loc_ip}</div>
+            <div class="metric-value" style="font-family:'JetBrains Mono', monospace; font-size:1.35rem; color:#38bdf8;">{main_ip}</div>
             <div style="font-size: 0.8rem; opacity: 0.7;">{sub_label}</div>
         </div>
         """, unsafe_allow_html=True)
@@ -401,6 +411,35 @@ if nav_section == "Overview":
                 st.error(f"⚠️ **FAILURE [{ts}]** — {ev.get('description')}")
     else:
         st.caption("No state transitions recorded yet. Running stably.")
+
+    st.divider()
+
+    # Quick Live Benchmark Section (100% Dynamic for Any Visitor)
+    st.subheader("⚡ Live On-Demand Network Probe")
+    st.caption("Benchmark any custom IP, website, or router port live from this active dashboard:")
+    c_prb1, c_prb2, c_prb3 = st.columns([3, 1, 1.2])
+    with c_prb1:
+        probe_target = st.text_input("Target Host or Domain:", value="google.com", key="quick_probe_target", label_visibility="collapsed")
+    with c_prb2:
+        probe_port = st.number_input("Port:", min_value=1, max_value=65535, value=443, key="quick_probe_port", label_visibility="collapsed")
+    with c_prb3:
+        do_quick_probe = st.button("🚀 Probe Live Now", use_container_width=True)
+
+    if do_quick_probe and probe_target:
+        with st.spinner(f"Probing {probe_target}:{probe_port}..."):
+            t_res = test_tcp_port(probe_target.strip(), int(probe_port), timeout_sec=2.0)
+            d_res = resolve_dns(probe_target.strip(), timeout_sec=2.0)
+            col_pr1, col_pr2 = st.columns(2)
+            with col_pr1:
+                if t_res.get("status") == "PASS":
+                    st.success(f"🔌 **TCP Port {probe_port}:** Handshake Verified in **{t_res.get('latency_ms')} ms** (PASS)")
+                else:
+                    st.error(f"❌ **TCP Port {probe_port}:** Failed ({t_res.get('error', 'Unreachable')})")
+            with col_pr2:
+                if d_res.get("status") == "PASS":
+                    st.success(f"🌐 **DNS Resolution:** Resolved to `{d_res.get('addresses')}` in **{d_res.get('latency_ms')} ms**")
+                else:
+                    st.error(f"❌ **DNS Resolution:** Failed ({d_res.get('error')})")
 
     st.divider()
 
