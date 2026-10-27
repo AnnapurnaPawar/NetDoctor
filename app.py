@@ -296,14 +296,22 @@ is_cloud = (
 )
 
 # Extract client IP if available via Streamlit context
-client_ip = getattr(st.context, "ip_address", None)
-if not client_ip and hasattr(st.context, "headers"):
+client_ip = None
+if hasattr(st.context, "headers") and st.context.headers:
     try:
-        raw_forwarded = st.context.headers.get("x-forwarded-for") or st.context.headers.get("remote-addr")
+        raw_forwarded = st.context.headers.get("x-forwarded-for") or st.context.headers.get("x-real-ip")
         if raw_forwarded:
             client_ip = raw_forwarded.split(",")[0].strip()
     except Exception:
         pass
+
+if not client_ip or client_ip in ("::ffff:127.0.0.1", "127.0.0.1", "localhost"):
+    ctx_ip = getattr(st.context, "ip_address", None)
+    if ctx_ip and ctx_ip not in ("::ffff:127.0.0.1", "127.0.0.1", "localhost"):
+        client_ip = ctx_ip
+
+# Human-readable client label for UI
+client_label = client_ip if client_ip and not client_ip.startswith("::ffff:127.") else "Remote Web Client (Proxy Routed)"
 
 # ==========================================
 # 1. OVERVIEW SECTION
@@ -315,10 +323,10 @@ if nav_section == "Overview":
 
     if is_cloud:
         st.markdown("☁️ **Running in Streamlit Cloud (Centralized AWS Server Mode)** • Real-time telemetry from the cloud host.")
-        if client_ip:
-            st.info(f"📱 **Client-Server Network Model:** You are connected from client IP **`{client_ip}`** (your internet gateway). Every device viewing this link connects to the same central cloud server (**`{loc_ip}`**). Web browsers prohibit remote websites from scanning your phone or laptop's private Wi-Fi card (`192.168.x.x`). To monitor your personal PC's physical Wi-Fi, run NetDoctor locally on your laptop!")
+        if client_ip and not client_ip.startswith("::ffff:127."):
+            st.info(f"📱 **Client-Server Network Model:** You are connected from client IP **`{client_ip}`**. Every device viewing this link connects to the same central cloud server (**`{loc_ip}`**). Web browsers prohibit remote websites from scanning your phone or laptop's private Wi-Fi card (`192.168.x.x`). To monitor your personal PC's physical Wi-Fi, run NetDoctor locally on your laptop!")
         else:
-            st.info(f"💡 **Client-Server Architecture:** NetDoctor is hosted on a central cloud server. Every phone or laptop viewing this link connects to the same cloud server (**`{loc_ip}`**). To monitor your personal PC's private Wi-Fi card, run NetDoctor locally on your computer.")
+            st.info(f"📱 **Client-Server Network Model:** Every phone or laptop viewing this link connects to the same central cloud server (**`{loc_ip}`**). Web browsers prohibit remote websites from scanning your device's private Wi-Fi card (`192.168.x.x`). To monitor your personal PC's physical Wi-Fi, run NetDoctor locally on your laptop!")
     else:
         st.markdown("💻 **Running on Local Workstation (Windows PC Mode)** • Probing physical Wi-Fi/Ethernet network adapter, Layer 3 home gateway, Layer 4 transport, and Layer 7 DNS services.")
 
@@ -343,7 +351,10 @@ if nav_section == "Overview":
 
     with col_stat2:
         header_title = "Cloud Host IPv4" if is_cloud else "Local IPv4 Address"
-        sub_label = f"Your Client IP: {client_ip}" if (is_cloud and client_ip) else (f"Cloud Host NIC ({nic_name})" if is_cloud else f"Adapter: {nic_name}")
+        if is_cloud:
+            sub_label = f"Your Client IP: {client_ip}" if (client_ip and not client_ip.startswith("::ffff:127.")) else f"Host NIC: {nic_name}"
+        else:
+            sub_label = f"Adapter: {nic_name}"
         st.markdown(f"""
         <div class="metric-hero">
             <div class="header-pill">{header_title}</div>
