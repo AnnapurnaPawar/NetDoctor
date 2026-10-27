@@ -41,245 +41,106 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Modern Clean Enterprise NOC UI Styling (NetSentry Light Theme)
+# Custom Technical NOC Dashboard UI Styling
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-    /* Global Typography & Canvas */
-    html, body, [class*="css"], .stApp {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-        background-color: #F8FAFC !important;
-        color: #0F172A !important;
+    html, body, [class*="css"] {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* Streamlit Main View Container */
-    .block-container {
-        padding-top: 1.6rem !important;
-        padding-bottom: 3rem !important;
-        max-width: 1240px !important;
-    }
-
-    /* Clean White Sidebar */
-    [data-testid="stSidebar"] {
-        background-color: #FFFFFF !important;
-        border-right: 1px solid #E2E8F0 !important;
-    }
-    [data-testid="stSidebar"] hr {
-        border-color: #E2E8F0 !important;
-        margin: 12px 0 !important;
-    }
-    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-        color: #475569 !important;
-    }
-
-    /* Sidebar Radio Navigation Items */
-    [data-testid="stSidebar"] div[role="radiogroup"] > label {
-        background: transparent !important;
-        border: 1px solid transparent !important;
-        border-radius: 6px !important;
-        padding: 6px 12px !important;
-        margin-bottom: 3px !important;
-        transition: all 0.15s ease !important;
-    }
-    [data-testid="stSidebar"] div[role="radiogroup"] > label:hover {
-        background: #F1F5F9 !important;
-    }
-    [data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) {
-        background: #EFF6FF !important;
-        border-color: #BFDBFE !important;
-    }
-    [data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) p {
-        color: #1D4ED8 !important;
-        font-weight: 600 !important;
-    }
-
-    /* Buttons */
-    button[kind="primary"] {
-        background-color: #2563EB !important;
-        border-color: #2563EB !important;
-        color: #FFFFFF !important;
-        border-radius: 6px !important;
-        font-weight: 500 !important;
-        font-size: 0.85rem !important;
-        box-shadow: 0 1px 2px rgba(37, 99, 235, 0.12) !important;
-    }
-    button[kind="primary"]:hover {
-        background-color: #1D4ED8 !important;
-        border-color: #1D4ED8 !important;
-    }
-    button[kind="secondary"] {
-        background-color: #FFFFFF !important;
-        border-color: #CBD5E1 !important;
-        color: #334155 !important;
-        border-radius: 6px !important;
-        font-weight: 500 !important;
-        font-size: 0.85rem !important;
-    }
-    button[kind="secondary"]:hover {
-        background-color: #F8FAFC !important;
-        border-color: #94A3B8 !important;
-    }
-
-    /* Form Inputs */
-    input, textarea, select, [data-baseweb="input"], [data-baseweb="select"] {
-        border-radius: 6px !important;
-        border-color: #CBD5E1 !important;
-        color: #0F172A !important;
-        background-color: #FFFFFF !important;
-        font-size: 0.88rem !important;
-    }
-
-    /* White Panel Card Container */
-    .ns-panel {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 8px;
-        padding: 18px 20px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-        margin-bottom: 18px;
-    }
-    .ns-panel-title {
-        font-size: 1.02rem;
-        font-weight: 700;
-        color: #0F172A;
-        margin: 0 0 2px 0;
-    }
-    .ns-panel-subtitle {
+    /* Restrained, Non-Pulsing Status Badges */
+    .badge-pass {
+        background: #064e3b;
+        color: #6ee7b7;
+        border: 1px solid #059669;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-weight: 600;
         font-size: 0.82rem;
-        color: #64748B;
-        margin-bottom: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        letter-spacing: 0.02em;
+    }
+    .badge-warn {
+        background: #451a03;
+        color: #fcd34d;
+        border: 1px solid #d97706;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.82rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        letter-spacing: 0.02em;
+    }
+    .badge-fail {
+        background: #450a0a;
+        color: #fca5a5;
+        border: 1px solid #dc2626;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.82rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        letter-spacing: 0.02em;
     }
 
-    /* Metric Hero Tile (NetSentry Match) */
-    .ns-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 8px;
-        padding: 16px 18px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+    /* Clean Technical Metric Card */
+    .metric-hero {
+        background: #111827;
+        border: 1px solid #1f2937;
+        border-radius: 6px;
+        padding: 14px 16px;
+        transition: border-color 0.15s ease;
     }
-    .ns-card:hover {
-        border-color: #CBD5E1;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    .metric-hero:hover {
+        border-color: #374151;
     }
-    .ns-card-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-    }
-    .ns-card-icon {
-        font-size: 0.95rem;
-    }
-    .ns-card-title {
-        font-size: 0.72rem;
+    .header-pill {
+        display: inline-block;
+        font-size: 0.7rem;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: #64748B;
+        color: #94a3b8;
+        margin-bottom: 4px;
     }
-    .ns-card-value {
+    .metric-hero .metric-value {
         font-family: 'JetBrains Mono', Consolas, monospace;
-        font-size: 1.45rem;
-        font-weight: 700;
-        color: #0F172A;
-        margin: 4px 0 4px 0;
-        line-height: 1.2;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #f8fafc;
+        margin: 4px 0 2px 0;
     }
-    .ns-card-sub {
+    .metric-hero .metric-sub {
         font-size: 0.75rem;
-        color: #64748B;
+        color: #64748b;
     }
 
-    /* Network Interface Chip (NetSentry Match) */
-    .ns-nic-chip {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 6px;
-        padding: 8px 14px;
-        min-width: 145px;
-        display: inline-block;
-        margin-right: 8px;
-        margin-bottom: 8px;
-    }
-    .ns-nic-name {
-        font-size: 0.72rem;
-        color: #64748B;
-        font-weight: 500;
-        margin-bottom: 3px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 155px;
-    }
-    .ns-nic-ip {
-        font-family: 'JetBrains Mono', Consolas, monospace;
-        font-size: 0.92rem;
-        font-weight: 700;
-        color: #0F172A;
-    }
-
-    /* Crisp Clean Status Badges */
-    .badge-pass {
-        background: #ECFDF5;
-        color: #047857;
-        border: 1px solid #A7F3D0;
-        font-weight: 600;
-        border-radius: 6px;
-        padding: 4px 10px;
-        font-size: 0.8rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-    }
-    .badge-warn {
-        background: #FFFBEB;
-        color: #B45309;
-        border: 1px solid #FDE68A;
-        font-weight: 600;
-        border-radius: 6px;
-        padding: 4px 10px;
-        font-size: 0.8rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-    }
-    .badge-fail {
-        background: #FEF2F2;
-        color: #B91C1C;
-        border: 1px solid #FECACA;
-        font-weight: 600;
-        border-radius: 6px;
-        padding: 4px 10px;
-        font-size: 0.8rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    /* Terminal Console Window */
+    /* Terminal Console Faux Window */
     .cisco-terminal-box {
-        background: #0F172A;
-        border: 1px solid #1E293B;
-        border-radius: 8px;
+        background: #090d16;
+        border: 1px solid #1e293b;
+        border-radius: 6px;
         overflow: hidden;
-        margin: 12px 0;
+        margin: 10px 0;
     }
     .cisco-terminal-bar {
-        background: #1E293B;
-        padding: 8px 14px;
-        border-bottom: 1px solid #334155;
+        background: #0f172a;
+        padding: 6px 12px;
+        border-bottom: 1px solid #1e293b;
         display: flex;
         align-items: center;
         gap: 6px;
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.78rem;
-        color: #94A3B8;
+        color: #94a3b8;
     }
     .term-dot {
         width: 8px;
@@ -287,16 +148,17 @@ st.markdown("""
         border-radius: 50%;
         display: inline-block;
     }
-    .dot-red { background: #EF4444; }
-    .dot-yellow { background: #F59E0B; }
-    .dot-green { background: #10B981; }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
 
+    /* Polished Code Box */
     .cisco-code {
-        background: #0F172A;
-        color: #38BDF8;
-        padding: 12px 16px;
-        border-radius: 6px;
-        border-left: 3px solid #0284C7;
+        background: #090d16;
+        color: #38bdf8;
+        padding: 10px 14px;
+        border-radius: 4px;
+        border-left: 2px solid #0284c7;
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.85rem;
         line-height: 1.45;
@@ -304,30 +166,14 @@ st.markdown("""
         white-space: pre-wrap;
     }
 
-    /* Streamlit Containers with Border */
-    [data-testid="stVerticalBlockBorderWrapper"] {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E2E8F0 !important;
-        border-radius: 8px !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
-    }
-
-    /* Clean Table Presentation */
+    /* Clean Table and Container Borders */
     [data-testid="stDataFrame"] {
-        border: 1px solid #E2E8F0 !important;
-        border-radius: 8px !important;
-        background: #FFFFFF !important;
+        border: 1px solid #1f2937;
+        border-radius: 6px;
     }
-
-    /* Clean Tabs */
-    button[data-baseweb="tab"] {
-        color: #64748B !important;
-        font-weight: 500 !important;
-    }
-    button[data-baseweb="tab"][aria-selected="true"] {
-        color: #2563EB !important;
-        font-weight: 600 !important;
-        border-bottom-color: #2563EB !important;
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        border-color: #1f2937 !important;
+        border-radius: 6px !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -371,11 +217,11 @@ def trigger_diagnostic_run():
 # Sidebar Navigation & Controls
 with st.sidebar:
     st.markdown("""
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 2px 0;">
-        <div style="background: #2563eb; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: #ffffff; box-shadow: 0 1px 3px rgba(37,99,235,0.3);">🛡️</div>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <div style="background: #1e293b; width: 36px; height: 36px; border-radius: 6px; border: 1px solid #334155; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">🩺</div>
         <div>
-            <div style="font-size: 1.12rem; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;">NetDoctor</div>
-            <div style="font-size: 0.65rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;">Network NOC & Lab</div>
+            <div style="font-size: 1.15rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.3px;">NetDoctor</div>
+            <div style="font-size: 0.68rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Network Diagnostic System</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -404,34 +250,21 @@ with st.sidebar:
         st.caption("⚪ Monitoring Idle (Manual mode)")
 
     st.divider()
-
-    nav_display_to_section = {
-        "📊 Dashboard": "Overview",
-        "📈 Live Monitoring": "Live Monitoring",
-        "🩺 Fault Diagnosis": "Fault Diagnosis",
-        "🧪 Manual Diagnostics": "Manual Diagnostics",
-        "🔬 Routing & Lab (Cisco)": "Packet Tracer Lab Mode",
-        "📜 History & Export": "History & Export",
-        "⚙️ Settings & Config": "Settings & Config",
-    }
-    nav_selected = st.radio(
-        "Navigation",
-        list(nav_display_to_section.keys()),
-        label_visibility="collapsed"
+    nav_section = st.radio(
+        "📍 Navigation Section:",
+        [
+            "Overview",
+            "Live Monitoring",
+            "Fault Diagnosis",
+            "Manual Diagnostics",
+            "Packet Tracer Lab Mode",
+            "History & Export",
+            "Settings & Config",
+        ]
     )
-    nav_section = nav_display_to_section[nav_selected]
 
     st.divider()
-    st.markdown("""
-    <div style="padding: 10px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
-        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; color: #047857;">
-            <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block;"></span> Backend Connected
-        </div>
-        <div style="font-size: 0.7rem; color: #64748b; margin-top: 2px;">
-            Multi-layer diagnostic engine ready
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.caption("NetDoctor Enterprise v2.0 • Computer Engineering Project")
 
 
 # Read current network snapshot
@@ -465,36 +298,29 @@ if not client_ip or client_ip in ("::ffff:127.0.0.1", "127.0.0.1", "localhost"):
 client_label = client_ip if client_ip and not client_ip.startswith("::ffff:127.") else "Remote Web Client (Proxy Routed)"
 
 # ==========================================
-# 1. OVERVIEW / DASHBOARD SECTION (NetSentry Match)
+# 1. OVERVIEW SECTION
 # ==========================================
 if nav_section == "Overview":
+    st.title("🌐 Network Operations Center (NOC) Overview")
     loc_ip = primary_info.get("local_ip", "Unknown")
     nic_name = primary_info.get("interface", "NIC")[:20]
-    adapters = snap.get("adapters", [])
 
-    # Top Header Bar (NetSentry Match)
-    col_head_left, col_head_right = st.columns([3, 1])
-    with col_head_left:
-        st.markdown("""
-        <div style="margin-bottom: 8px;">
-            <h1 style="font-size: 1.55rem; font-weight: 700; color: #0f172a; margin: 0 0 2px 0; letter-spacing: -0.02em;">Dashboard</h1>
-            <div style="font-size: 0.85rem; color: #64748b;">System metrics, live connections, and recent events</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with col_head_right:
-        adapter_count = len(adapters)
+    if is_cloud:
+        active_client = client_ip if (client_ip and not client_ip.startswith("::ffff:127.")) else "Dynamic Web Client"
         st.markdown(f"""
-        <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center; margin-top: 6px;">
-            <span style="background: #ffffff; color: #475569; border: 1px solid #e2e8f0; font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 999px;">
-                ● {adapter_count} adapters
-            </span>
-            <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 999px;">
-                ● Connected
-            </span>
+        <div style="background: #111827; border: 1px solid #1f2937; border-left: 3px solid #0284c7; border-radius: 6px; padding: 10px 14px; margin-bottom: 16px;">
+            <div style="font-size: 0.88rem; font-weight: 500; color: #e2e8f0;">
+                Connected Endpoint: <code style="color:#38bdf8; background:#0f172a; padding:1px 6px; border-radius:3px;">{active_client}</code> &bull; Host Gateway: <code style="color:#94a3b8; background:#0f172a; padding:1px 6px; border-radius:3px;">{loc_ip}</code>
+            </div>
+            <div style="font-size: 0.75rem; color: #64748b; margin-top: 3px;">
+                Active multi-layer telemetry across Layer 3 Gateway, Layer 4 TCP transport, and Layer 7 DNS services.
+            </div>
         </div>
         """, unsafe_allow_html=True)
+    else:
+        st.markdown("💻 **Running on Local Workstation (Windows PC Mode)** • Probing physical Wi-Fi/Ethernet network adapter, Layer 3 home gateway, Layer 4 transport, and Layer 7 DNS services.")
 
-    # Row 1: Top Metric Cards (NetSentry Match)
+    # Status Banner Cards
     col_stat1, col_stat2, col_stat3, col_stat4 = st.columns(4)
 
     with col_stat1:
@@ -506,13 +332,10 @@ if nav_section == "Overview":
             status_html = "<span class='badge-fail'>● OUTAGE (FAIL)</span>"
 
         st.markdown(f"""
-        <div class="ns-card">
-            <div class="ns-card-header">
-                <span class="ns-card-icon">⚡</span>
-                <span class="ns-card-title">System Status</span>
-            </div>
-            <div style="margin: 6px 0 8px 0;">{status_html}</div>
-            <div class="ns-card-sub">Multi-layer network telemetry verified</div>
+        <div class="metric-hero">
+            <div class="header-pill">System Status</div>
+            <div style="margin: 6px 0 6px 0;">{status_html}</div>
+            <div class="metric-sub">Multi-layer network telemetry</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -522,18 +345,15 @@ if nav_section == "Overview":
             main_ip = client_ip
             sub_label = f"Host Server: {loc_ip} (eth0)"
         else:
-            header_title = "Host IPv4 Address"
+            header_title = "Local IPv4 Address"
             main_ip = loc_ip
             sub_label = f"Adapter: {nic_name}"
 
         st.markdown(f"""
-        <div class="ns-card">
-            <div class="ns-card-header">
-                <span class="ns-card-icon">🌐</span>
-                <span class="ns-card-title">{header_title}</span>
-            </div>
-            <div class="ns-card-value">{main_ip}</div>
-            <div class="ns-card-sub">{sub_label}</div>
+        <div class="metric-hero">
+            <div class="header-pill">{header_title}</div>
+            <div class="metric-value">{main_ip}</div>
+            <div class="metric-sub">{sub_label}</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -541,13 +361,10 @@ if nav_section == "Overview":
         gw_ip = primary_info.get("default_gateway", "Not Detected")
         gw_sub = "Cloud Container Gateway" if is_cloud else "Layer 3 Next-Hop Router"
         st.markdown(f"""
-        <div class="ns-card">
-            <div class="ns-card-header">
-                <span class="ns-card-icon">🚪</span>
-                <span class="ns-card-title">Default Gateway</span>
-            </div>
-            <div class="ns-card-value">{gw_ip}</div>
-            <div class="ns-card-sub">{gw_sub}</div>
+        <div class="metric-hero">
+            <div class="header-pill">Default Gateway</div>
+            <div class="metric-value">{gw_ip}</div>
+            <div class="metric-sub">{gw_sub}</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -556,174 +373,119 @@ if nav_section == "Overview":
         ts_time = ts_full[11:19] if len(ts_full) >= 19 else "Just now"
         ts_date = ts_full[:10] if len(ts_full) >= 10 else ""
         st.markdown(f"""
-        <div class="ns-card">
-            <div class="ns-card-header">
-                <span class="ns-card-icon">⏱️</span>
-                <span class="ns-card-title">Last Telemetry Check</span>
-            </div>
-            <div class="ns-card-value">{ts_time}</div>
-            <div class="ns-card-sub">Date: {ts_date}</div>
+        <div class="metric-hero">
+            <div class="header-pill">Last Telemetry Check</div>
+            <div class="metric-value">{ts_time}</div>
+            <div class="metric-sub">Date: {ts_date}</div>
         </div>
         """, unsafe_allow_html=True)
 
-    # Row 2: Network Interfaces Panel (Direct match to NetSentry screenshot)
-    chips_html = ""
-    if is_cloud and client_ip and not client_ip.startswith("::ffff:127."):
-        chips_html += f"""
-        <div class="ns-nic-chip" style="background:#eff6ff; border-color:#bfdbfe;">
-            <div class="ns-nic-name" style="color:#1d4ed8; font-weight:600;">Client Device (You)</div>
-            <div class="ns-nic-ip" style="color:#1d4ed8;">{client_ip}</div>
-        </div>
-        """
-    if adapters:
-        for a in adapters:
-            nic_title = a.get("interface", "NIC")
-            ip_val = a.get("ipv4", "Unassigned")
-            chips_html += f"""
-            <div class="ns-nic-chip">
-                <div class="ns-nic-name" title="{nic_title}">{nic_title}</div>
-                <div class="ns-nic-ip">{ip_val}</div>
-            </div>
-            """
+    st.divider()
+
+    # Recent Events (Failures and Recoveries)
+    st.subheader("🔔 Recent State Transitions & Recovery Events")
+    recent_events = st.session_state.tracker.events[-5:]
+    if recent_events:
+        for ev in reversed(recent_events):
+            ev_type = ev.get("event_type")
+            ts = ev.get("timestamp")[:19].replace("T", " ")
+            if ev_type == "RECOVERY":
+                st.success(f"🎉 **RECOVERY [{ts}]** — {ev.get('description')}")
+            else:
+                st.error(f"⚠️ **FAILURE [{ts}]** — {ev.get('description')}")
     else:
-        chips_html = f"""
-        <div class="ns-nic-chip">
-            <div class="ns-nic-name">Primary NIC</div>
-            <div class="ns-nic-ip">{loc_ip}</div>
-        </div>
-        """
+        st.caption("No state transitions recorded yet. Running stably.")
 
-    st.markdown(f"""
-    <div class="ns-panel">
-        <div class="ns-panel-title">Network Interfaces</div>
-        <div class="ns-panel-subtitle">IPv4 addresses assigned to each network adapter on this host.</div>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-            {chips_html}
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.divider()
 
-    # Row 3: Protocol Telemetry & Layer Verification (NetSentry Match)
+    # Quick Live Benchmark Section (100% Dynamic for Any Visitor)
+    st.subheader("⚡ Live On-Demand Network Probe")
+    st.caption("Benchmark any custom IP, website, or router port live from this active dashboard:")
+    c_prb1, c_prb2, c_prb3 = st.columns([3, 1, 1.2])
+    with c_prb1:
+        probe_target = st.text_input("Target Host or Domain:", value="google.com", key="quick_probe_target", label_visibility="collapsed")
+    with c_prb2:
+        probe_port = st.number_input("Port:", min_value=1, max_value=65535, value=443, key="quick_probe_port", label_visibility="collapsed")
+    with c_prb3:
+        do_quick_probe = st.button("🚀 Probe Live Now", use_container_width=True)
+
+    if do_quick_probe and probe_target:
+        with st.spinner(f"Probing {probe_target}:{probe_port}..."):
+            t_res = test_tcp_port(probe_target.strip(), int(probe_port), timeout_sec=2.0)
+            d_res = resolve_dns(probe_target.strip(), timeout_sec=2.0)
+            col_pr1, col_pr2 = st.columns(2)
+            with col_pr1:
+                if t_res.get("status") == "PASS":
+                    st.success(f"🔌 **TCP Port {probe_port}:** Handshake Verified in **{t_res.get('latency_ms')} ms** (PASS)")
+                else:
+                    st.error(f"❌ **TCP Port {probe_port}:** Failed ({t_res.get('error', 'Unreachable')})")
+            with col_pr2:
+                if d_res.get("status") == "PASS":
+                    st.success(f"🌐 **DNS Resolution:** Resolved to `{d_res.get('addresses')}` in **{d_res.get('latency_ms')} ms**")
+                else:
+                    st.error(f"❌ **DNS Resolution:** Failed ({d_res.get('error')})")
+
+    st.divider()
+
+    # Top Level Health Summary Cards
+    st.subheader("📊 Layer Health Breakdown")
+    col_l1, col_l2, col_l3, col_l4 = st.columns(4)
+
     gw_test = snap.get("gateway_test", {})
     dns_res = snap.get("dns_results", [])
     tcp_res = snap.get("tcp_results", [])
     ping_res = snap.get("ping_results", [])
 
-    dns_passes = sum(1 for d in dns_res if d.get("status") == "PASS")
-    dns_total = len(dns_res)
-    tcp_passes = sum(1 for t in tcp_res if t.get("status") == "PASS")
-    tcp_total = len(tcp_res)
-
-    st.markdown(f"""
-    <div class="ns-panel">
-        <div class="ns-panel-title">Protocol Telemetry & Layer Verification</div>
-        <div class="ns-panel-subtitle">Multi-layer operational status across Gateway, DNS resolution, and TCP port transport.</div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 10px;">
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px 14px;">
-                <div style="font-size:0.72rem; color:#64748b; font-weight:600; text-transform:uppercase;">Layer 3 Gateway</div>
-                <div style="font-size:1.15rem; font-weight:700; color:#0f172a; margin:3px 0;">{gw_test.get('rtt_avg_ms', 0)} ms</div>
-                <div style="font-size:0.75rem; color:#047857; font-weight:600;">PASS &bull; Target: {gw_test.get('target', 'N/A')}</div>
-            </div>
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px 14px;">
-                <div style="font-size:0.72rem; color:#64748b; font-weight:600; text-transform:uppercase;">Layer 7 DNS</div>
-                <div style="font-size:1.15rem; font-weight:700; color:#0f172a; margin:3px 0;">{dns_passes}/{dns_total} Resolved</div>
-                <div style="font-size:0.75rem; color:#047857; font-weight:600;">PASS &bull; Global Resolvers</div>
-            </div>
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px 14px;">
-                <div style="font-size:0.72rem; color:#64748b; font-weight:600; text-transform:uppercase;">Layer 4 TCP</div>
-                <div style="font-size:1.15rem; font-weight:700; color:#0f172a; margin:3px 0;">{tcp_passes}/{tcp_total} Connected</div>
-                <div style="font-size:0.75rem; color:#047857; font-weight:600;">PASS &bull; Ports 80, 443, 53</div>
-            </div>
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px 14px;">
-                <div style="font-size:0.72rem; color:#64748b; font-weight:600; text-transform:uppercase;">Network Platform</div>
-                <div style="font-size:1.15rem; font-weight:700; color:#0f172a; margin:3px 0;">{primary_info.get('interface', 'eth0')[:18]}</div>
-                <div style="font-size:0.75rem; color:#2563eb; font-weight:600;">{'Cloud Linux Host' if is_cloud else 'Windows Physical PC'}</div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Row 4: Live Events Panel (Direct match to NetSentry screenshot)
-    recent_events = st.session_state.tracker.events[-5:]
-    events_count = len(recent_events)
-
-    if recent_events:
-        events_list_html = ""
-        for ev in reversed(recent_events):
-            ev_type = ev.get("event_type")
-            ts = ev.get("timestamp")[:19].replace("T", " ")
-            desc = ev.get("description", "")
-            if ev_type == "RECOVERY":
-                events_list_html += f"""
-                <div style="display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid #f1f5f9;">
-                    <span style="color:#10b981; font-weight:700;">✓</span>
-                    <span style="font-size:0.82rem; font-weight:600; color:#047857;">RECOVERY [{ts}]</span>
-                    <span style="font-size:0.82rem; color:#334155;">&mdash; {desc}</span>
-                </div>
-                """
+    with col_l1:
+        with st.container(border=True):
+            st.markdown("### 🚪 Layer 3")
+            st.markdown("**Default Gateway**")
+            st.caption(f"Target: `{gw_test.get('target', 'N/A')}`")
+            if gw_test.get("status") == "PASS":
+                st.success(f"PASS • {gw_test.get('rtt_avg_ms', 0)} ms")
+            elif gw_test.get("status") == "WARNING":
+                st.warning(f"WARN • {gw_test.get('loss_pct', 0)}% loss")
             else:
-                events_list_html += f"""
-                <div style="display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid #f1f5f9;">
-                    <span style="color:#ef4444; font-weight:700;">⚠</span>
-                    <span style="font-size:0.82rem; font-weight:600; color:#b91c1c;">FAILURE [{ts}]</span>
-                    <span style="font-size:0.82rem; color:#334155;">&mdash; {desc}</span>
-                </div>
-                """
-        events_body = events_list_html
-    else:
-        events_body = """
-        <div style="text-align: center; padding: 22px 0; color: #64748b;">
-            <div style="font-size: 1.5rem; color: #94a3b8; margin-bottom: 4px;">✓</div>
-            <div style="font-size: 0.85rem; font-weight: 500;">No events recorded yet. Connect a client or trigger a diagnostic run to generate activity.</div>
-        </div>
-        """
+                st.error(f"FAIL • {gw_test.get('error', 'Unreachable')}")
 
-    st.markdown(f"""
-    <div class="ns-panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div class="ns-panel-title" style="display: flex; align-items: center; gap: 8px;">
-                Live Events <span style="color: #10b981; font-size: 0.75rem;">●</span>
-            </div>
-            <div style="font-size: 0.75rem; color: #64748b;">{events_count} events</div>
-        </div>
-        {events_body}
-    </div>
-    """, unsafe_allow_html=True)
+    with col_l2:
+        with st.container(border=True):
+            st.markdown("### 🌐 Layer 7")
+            st.markdown("**DNS Resolution**")
+            dns_passes = sum(1 for d in dns_res if d.get("status") == "PASS")
+            dns_total = len(dns_res)
+            st.caption(f"{dns_passes}/{dns_total} Domains Resolved")
+            if dns_passes == dns_total and dns_total > 0:
+                st.success("PASS • Normal")
+            else:
+                st.error(f"FAIL • {dns_total - dns_passes} Failed")
 
-    # Row 5: Live On-Demand Network Probe Panel
-    with st.container():
-        st.markdown("""
-        <div class="ns-panel" style="margin-bottom: 14px;">
-            <div class="ns-panel-title">Live On-Demand Network Probe</div>
-            <div class="ns-panel-subtitle">Benchmark any custom IP, website, or router port live from this active dashboard:</div>
-        </div>
-        """, unsafe_allow_html=True)
+    with col_l3:
+        with st.container(border=True):
+            st.markdown("### 🔌 Layer 4")
+            st.markdown("**TCP Connectivity**")
+            tcp_passes = sum(1 for t in tcp_res if t.get("status") == "PASS")
+            tcp_total = len(tcp_res)
+            st.caption(f"{tcp_passes}/{tcp_total} Services Connected")
+            if tcp_passes == tcp_total and tcp_total > 0:
+                st.success("PASS • Active Handshakes")
+            else:
+                st.error(f"FAIL • {tcp_total - tcp_passes} Failed")
 
-        c_prb1, c_prb2, c_prb3 = st.columns([3, 1, 1.2])
-        with c_prb1:
-            probe_target = st.text_input("Target Host or Domain:", value="google.com", key="quick_probe_target", label_visibility="collapsed")
-        with c_prb2:
-            probe_port = st.number_input("Port:", min_value=1, max_value=65535, value=443, key="quick_probe_port", label_visibility="collapsed")
-        with c_prb3:
-            do_quick_probe = st.button("🚀 Probe Live Now", use_container_width=True)
+    with col_l4:
+        with st.container(border=True):
+            st.markdown("### 💻 Network NIC")
+            st.markdown("**Active Adapters**")
+            adapters = snap.get("adapters", [])
+            up_count = sum(1 for a in adapters if a.get("is_up") and a.get("ipv4") != "Unassigned")
+            st.caption(f"{up_count} Active Interface(s)")
+            if is_cloud:
+                client_disp = client_ip if (client_ip and not client_ip.startswith("::ffff:127.")) else "Your PC"
+                st.info(f"Client: {client_disp}\nHost: {primary_info.get('interface', 'eth0')}")
+            else:
+                st.info(f"{primary_info.get('interface', 'Active')[:18]}")
 
-        if do_quick_probe and probe_target:
-            with st.spinner(f"Probing {probe_target}:{probe_port}..."):
-                t_res = test_tcp_port(probe_target.strip(), int(probe_port), timeout_sec=2.0)
-                d_res = resolve_dns(probe_target.strip(), timeout_sec=2.0)
-                col_pr1, col_pr2 = st.columns(2)
-                with col_pr1:
-                    if t_res.get("status") == "PASS":
-                        st.success(f"🔌 **TCP Port {probe_port}:** Handshake Verified in **{t_res.get('latency_ms')} ms** (PASS)")
-                    else:
-                        st.error(f"❌ **TCP Port {probe_port}:** Failed ({t_res.get('error', 'Unreachable')})")
-                with col_pr2:
-                    if d_res.get("status") == "PASS":
-                        st.success(f"🌐 **DNS Resolution:** Resolved to `{d_res.get('addresses')}` in **{d_res.get('latency_ms')} ms**")
-                    else:
-                        st.error(f"❌ **DNS Resolution:** Failed ({d_res.get('error')})")
-
-    # Diagnostic Finding Alert (if any issues)
+    # Active Diagnostic Finding Alert
     if findings:
         primary_find = findings[0]
         if "Comprehensive Network Health" not in primary_find.get("test_name", ""):
@@ -856,11 +618,11 @@ elif nav_section == "Fault Diagnosis":
         rerun_hint = f.get("rerun_hint")
 
         if confidence == "HIGH":
-            conf_badge = "<span style='background:#ecfdf5; color:#047857; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem; border:1px solid #a7f3d0;'>CONFIDENCE: HIGH</span>"
+            conf_badge = "<span style='background:#064e3b; color:#6ee7b7; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem; border:1px solid #059669;'>CONFIDENCE: HIGH</span>"
         elif confidence == "MEDIUM":
-            conf_badge = "<span style='background:#fffbeb; color:#b45309; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem; border:1px solid #fde68a;'>CONFIDENCE: MEDIUM</span>"
+            conf_badge = "<span style='background:#451a03; color:#fcd34d; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem; border:1px solid #d97706;'>CONFIDENCE: MEDIUM</span>"
         else:
-            conf_badge = "<span style='background:#f1f5f9; color:#475569; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem; border:1px solid #cbd5e1;'>CONFIDENCE: LOW</span>"
+            conf_badge = "<span style='background:#1e293b; color:#94a3b8; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem; border:1px solid #334155;'>CONFIDENCE: LOW</span>"
 
         with st.container(border=True):
             if "Comprehensive" in test_name:
