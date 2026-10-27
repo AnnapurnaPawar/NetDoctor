@@ -495,7 +495,11 @@ if nav_section == "Overview":
             adapters = snap.get("adapters", [])
             up_count = sum(1 for a in adapters if a.get("is_up") and a.get("ipv4") != "Unassigned")
             st.caption(f"{up_count} Active Interface(s)")
-            st.info(f"{primary_info.get('interface', 'Active')[:18]}")
+            if is_cloud:
+                client_disp = client_ip if (client_ip and not client_ip.startswith("::ffff:127.")) else "Your PC"
+                st.info(f"Client: {client_disp}\nHost: {primary_info.get('interface', 'eth0')}")
+            else:
+                st.info(f"{primary_info.get('interface', 'Active')[:18]}")
 
     # Active Diagnostic Finding Alert
     if findings:
